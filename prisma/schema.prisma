@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id           String        @id @default(uuid())
+  name         String
+  description  String
+  price        Decimal
+  stock        Int
+  transactions Transaction[]
+
+  @@index([price])
+  @@index([stock])
+}
+
+model Transaction {
+  id        String   @id @default(uuid())
+  buyerId   String
+  productId String
+  paidPrice Decimal
+  tax       Decimal
+  date      DateTime @default(now())
+  buyer     Buyer    @relation(fields: [buyerId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@index([buyerId])
+  @@index([productId])
+  @@index([date])
+}
+
+model Buyer {
+  id           String        @id @default(uuid())
+  firstName    String
+  lastName     String
+  idType       String
+  createdAt    DateTime      @default(now())
+  transactions Transaction[]
+  events       BuyerEvent[]
+
+  @@index([idType])
+  @@index([createdAt])
+}
+
+model BuyerEvent {
+  id      String    @id @default(uuid())
+  buyerId String
+  type    EventType
+  date    DateTime  @default(now())
+  buyer   Buyer     @relation(fields: [buyerId], references: [id])
+
+  @@index([buyerId])
+  @@index([type])
+}
+
+enum EventType {
+  PURCHASE
+  RETURN
+  VISIT
+  DATA_QUERY
+  DATA_UPDATE
+  INVOICE_DOWNLOAD
+}
