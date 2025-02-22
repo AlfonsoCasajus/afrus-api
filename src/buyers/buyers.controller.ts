@@ -12,14 +12,24 @@ import { BuyersService } from './buyers.service';
 import { CreateBuyerDto } from './dto/create-buyer.dto';
 import { UpdateBuyerDto } from './dto/update-buyer.dto';
 import { BuyersFilters } from 'src/buyers/dto/get-buyer.dto';
+import { CreateBuyerEventDto } from './dto/create-buyer-event.dto';
 
 @Controller('buyers')
 export class BuyersController {
 	constructor(private readonly buyersService: BuyersService) {}
 
 	@Post()
-	create(@Body() createBuyerDto: CreateBuyerDto) {
-		return this.buyersService.create(createBuyerDto);
+	createBuyer(@Body() createBuyerDto: CreateBuyerDto) {
+		return this.buyersService.createBuyer(createBuyerDto);
+	}
+	@Post(':id/event')
+	createBuyerEvent(
+		@Param('id') id: string,
+		@Body() createBuyerEventDto: CreateBuyerEventDto
+	) {
+		return this.buyersService.createBuyerEvent(id, {
+			...createBuyerEventDto
+		});
 	}
 
 	@Get()

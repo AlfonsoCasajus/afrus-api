@@ -4,8 +4,25 @@ import {
 	IsPositive,
 	IsString,
 	Max,
-	Min
+	Min,
+	IsArray
 } from 'class-validator';
+
+export interface Product {
+	id: number;
+	name: string;
+	price: number;
+	description: string;
+}
+
+export interface Transaction {
+	id: number;
+	paidPrice: number;
+	createdAt: string;
+	tax: number;
+	date: Date;
+	product: Product;
+}
 
 export class BuyersFilters {
 	@IsOptional()
@@ -15,6 +32,14 @@ export class BuyersFilters {
 	@IsOptional()
 	@IsString()
 	lastName?: string;
+
+	@IsOptional()
+	@IsString()
+	idType?: string;
+
+	@IsOptional()
+	@IsArray()
+	transactions?: Transaction[];
 
 	@IsOptional()
 	@IsNumber()

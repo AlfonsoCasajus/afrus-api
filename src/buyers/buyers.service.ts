@@ -1,14 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Prisma, Buyer } from '@prisma/client';
+import { Prisma, Buyer, BuyerEvent } from '@prisma/client';
+import { CreateBuyerEventDto } from './dto/create-buyer-event.dto';
 
 @Injectable()
 export class BuyersService {
 	constructor(private prisma: PrismaService) {}
 
-	async create(createBuyerDto: Prisma.BuyerCreateInput): Promise<Buyer> {
+	async createBuyer(createBuyerDto: Prisma.BuyerCreateInput): Promise<Buyer> {
 		return this.prisma.buyer.create({
 			data: createBuyerDto
+		});
+	}
+	async createBuyerEvent(
+		buyerId: string,
+		createBuyerEventDto: CreateBuyerEventDto
+	): Promise<BuyerEvent> {
+		return this.prisma.buyerEvent.create({
+			data: {
+				buyer: {
+					connect: {
+						id: buyerId
+					}
+				},
+				...createBuyerEventDto
+			}
 		});
 	}
 
@@ -29,7 +45,14 @@ export class BuyersService {
 				skip,
 				take,
 				where,
-				orderBy
+				orderBy,
+				include: {
+					transactions: {
+						include: {
+							product: true
+						}
+					}
+				}
 			}),
 			total
 		};
