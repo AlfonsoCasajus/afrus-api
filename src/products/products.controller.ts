@@ -5,11 +5,13 @@ import {
 	Body,
 	Patch,
 	Param,
-	Delete
+	Delete,
+	Query
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { ProductFilters } from './dto/get-products.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -21,8 +23,28 @@ export class ProductsController {
 	}
 
 	@Get()
-	findAll() {
-		return this.productsService.findAll({});
+	async findAll(@Query() filters: ProductFilters) {
+		const limit = filters.limit ?? 10;
+		const page = filters.page ?? 1;
+
+		return await this.productsService.findAll({
+			skip: limit * (page - 1),
+			limit,
+			where: {
+				name: {
+					contains: filters.name,
+					mode: 'insensitive'
+				},
+				stock: {
+					gte: filters.minStock,
+					lte: filters.maxStock
+				},
+				price: {
+					gte: filters.minPrice,
+					lte: filters.maxPrice
+				}
+			}
+		});
 	}
 
 	@Get(':id')
