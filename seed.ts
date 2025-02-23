@@ -7,8 +7,8 @@ const seedDatabase = async () => {
 	try {
 		console.log('🌱 Seeding database...');
 
-		// Generate Products (500 records)
-		const products = Array.from({ length: 500 }).map(() => ({
+		// Generate Products (5000 records)
+		const products = Array.from({ length: 5000 }).map(() => ({
 			id: faker.string.uuid(),
 			name: faker.commerce.productName(),
 			description: faker.commerce.productDescription(),
@@ -19,8 +19,8 @@ const seedDatabase = async () => {
 		await prisma.product.createMany({ data: products });
 		console.log('✅ Products inserted');
 
-		// Generate Buyers (2000 records)
-		const buyers = Array.from({ length: 2000 }).map(() => ({
+		// Generate Buyers (5000 records)
+		const buyers = Array.from({ length: 5000 }).map(() => ({
 			id: faker.string.uuid(),
 			firstName: faker.person.firstName(),
 			lastName: faker.person.lastName(),
