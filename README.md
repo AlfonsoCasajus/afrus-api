@@ -5,7 +5,9 @@ Se desarrollo una API utilizando Nest.js y Typescript que permite la gestion de 
 
 **Documentacion API:** https://afrus-api.onrender.com/api
 
-**Live Demo:** https://afrus-front.vercel.app/
+**Live Demo:** https://afrus-front.vercel.app
+
+**Codigo Front End:** https://github.com/AlfonsoCasajus/afrus-front
 
 ## Tecnologias Utilizadas
 
